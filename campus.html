@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The One With Our College Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#6E44FF', 
+                            yellow: '#FFC857', 
+                            red: '#E94F37',    
+                            dark: '#1A1A1D',
+                            light: '#F8F9FA',
+                            coffee: '#4A3022',
+                            cream: '#FDFBF7', /* Map background */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        handwriting: ['Caveat', 'cursive'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'dash': 'dash 3s linear forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        dash: {
+                            'to': { strokeDashoffset: 0 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #1A1A1D; color: #F8F9FA; overflow-x: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1A1A1D; }
+        ::-webkit-scrollbar-thumb { background: #6E44FF; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FFC857; }
+
+        /* Loader */
+        #loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #1A1A1D; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 1s ease-out;
+        }
+        
+        .friends-dots { font-family: 'Inter', sans-serif; font-weight: 900; letter-spacing: 0.1em; }
+        .dot { color: #FFC857; padding: 0 4px; font-size: 0.8em; }
+        .dot.red { color: #E94F37; }
+        .dot.blue { color: #44A1FF; }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Floating Objects Hero */
+        .floating-obj { position: absolute; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); opacity: 0.8; z-index: 10; pointer-events: none;}
+        
+        /* Hover Cards */
+        .character-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .character-card:hover { transform: translateY(-15px) scale(1.02); z-index: 20; box-shadow: 0 20px 40px rgba(110, 68, 255, 0.2); border-color: #FFC857; }
+        .char-icon { transition: all 0.3s ease; }
+        .character-card:hover .char-icon { transform: scale(1.2) rotate(10deg); color: #FFC857; }
+
+        /* Neo-Brutalist Map Styles */
+        .neo-border {
+            border: 4px solid #1A1A1D;
+            box-shadow: 8px 8px 0px #1A1A1D;
+        }
+        /* Campus Map Theme */
+.dark-neo-border {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 30px rgba(110, 68, 255, 0.25);
+}
+
+.map-bg-pattern {
+    background-color: #1A1A1D;
+
+    background-image:
+        radial-gradient(
+            rgba(110, 68, 255, 0.12) 1.5px,
+            transparent 1.5px
+        );
+
+    background-size: 20px 20px;
+}
+
+.map-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    stroke: rgba(110, 68, 255, 0.5);
+}
+        .map-bg-pattern {
+    /* Change from #FDFBF7 to your new color */
+            background-color: #FFF7E0; 
+            background-image: radial-gradient(#1A1A1D 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.9;
+        }
+        
+        .map-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        /* Sunset ending */
+        .sunset-bg {
+            background: linear-gradient(to bottom, #1A1A1D 0%, #2A1B38 40%, #5E2A2A 70%, #D46A25 100%);
+        }
+
+        /* Reveal Animation on Scroll */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* Panel Transition Classes */
+        .panel-enter { opacity: 0; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .panel-enter-active { opacity: 1; transform: translateY(0); }
+        /* Premium Player Styles */
+        .vinyl-record {
+            transition: transform 0.1s linear;
+        }
+        .vinyl-spin {
+            animation: spin 4s linear infinite;
+        }
+        .lyric-line {
+            transition: all 0.3s ease;
+            opacity: 0.3;
+        }
+        .lyric-line.active {
+            opacity: 1;
+            transform: scale(1.05);
+            color: #FFC857; /* brand-yellow */
+            text-shadow: 0 0 10px rgba(255, 200, 87, 0.5);
+        }
+        .memory-quote {
+            animation: floatUp 4s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(-10px); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        .progress-container:hover .progress-hover-tooltip {
+            opacity: 1;
+        }
+/* Visualizer Bars */
+        .visualizer-bar {
+            width: 6px;
+            background: #6E44FF;
+            border-radius: 3px;
+            transition: height 0.1s ease;
+        }
+</style>
+</head>
+<body class="antialiased">
+
+    <!-- Loader Sequence -->
+    <div id="loader">
+        <h2 class="font-serif italic text-brand-yellow mb-4 text-xl">Loading Today's Episode...</h2>
+        <h1 class="friends-dots text-4xl md:text-6xl text-white flex items-center">
+            T<span class="dot red">•</span>H<span class="dot blue">•</span>E<span class="dot"></span> 
+            O<span class="dot red">•</span>N<span class="dot blue">•</span>E
+        </h1>
+        <p class="font-handwriting text-2xl text-gray-400 mt-6 animate-pulse">Where We Built This</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-white/10 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="font-serif text-2xl font-bold text-white tracking-wider">C<span class="text-brand-yellow">/</span>C</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#cast" class="text-gray-300 hover:text-brand-yellow transition-colors font-medium text-sm tracking-widest uppercase">The Cast</a>
+                    <a href="#cafe" class="text-gray-300 hover:text-brand-yellow transition-colors font-medium text-sm tracking-widest uppercase">Last Bench Café</a>
+                    <a href="#map-section" class="text-gray-300 hover:text-brand-yellow transition-colors font-medium text-sm tracking-widest uppercase">Campus Map</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Floating Elements -->
+        <div class="floating-obj animate-float text-6xl" style="top: 20%; left: 15%;">☕</div>
+        <div class="floating-obj animate-float-delayed text-5xl" style="top: 60%; left: 10%;">💻</div>
+        <div class="floating-obj animate-float text-7xl" style="top: 30%; right: 15%; filter: drop-shadow(0 0 20px #E94F37);">🎫</div>
+        <div class="floating-obj animate-float-delayed text-5xl" style="top: 70%; right: 20%;">📚</div>
+        
+        <!-- Background Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-purple rounded-full blur-[120px] opacity-20 pointer-events-none"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <span class="text-brand-yellow font-handwriting text-3xl md:text-4xl mb-4 block transform -rotate-2">Season 4, Episode Final</span>
+            <h1 class="friends-dots text-5xl md:text-8xl lg:text-9xl text-white font-black tracking-tighter mb-6 leading-tight">
+                C<span class="dot red">•</span>A<span class="dot blue">•</span>M<span class="dot yellow">•</span>P<span class="dot red">•</span>U<span class="dot blue">•</span>S
+            </h1>
+            <p class="mt-6 text-xl md:text-3xl text-gray-300 font-serif italic max-w-3xl mx-auto leading-relaxed">
+                "The One Where We Survived Engineering."
+            </p>
+            
+            <div class="mt-12 flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#cast" class="px-8 py-4 bg-brand-purple hover:bg-white hover:text-brand-purple text-white rounded-full font-bold transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(110,68,255,0.4)]">
+                    Start Episode
+                </a>
+                <a href="#map-section" class="px-8 py-4 glass-panel border border-brand-yellow/50 hover:bg-brand-yellow hover:text-brand-dark text-brand-yellow rounded-full font-bold transition-all transform hover:scale-105">
+                    Explore The Map
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
+            <span class="text-gray-500 text-xs tracking-widest uppercase mb-2">Scroll</span>
+            <i class="fas fa-chevron-down text-brand-yellow"></i>
+        </div>
+    </section>
+
+    <!-- Team Characters Section -->
+    <section id="cast" class="py-24 relative z-10 bg-[#151518]">
+        <!-- Keeping the existing Cast HTML intact... -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <h2 class="font-handwriting text-brand-yellow text-4xl mb-2">Starring</h2>
+                <h3 class="text-4xl md:text-5xl font-serif font-bold text-white">The Main Cast</h3>
+                <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Different personalities. Different dreams. Same chaotic project group.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Reema -->
+                <div class="character-card glass-panel rounded-3xl p-8 border border-white/10 relative overflow-hidden group reveal">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-red rounded-full blur-[80px] opacity-20 group-hover:opacity-50 transition-opacity"></div>
+                    <div class="text-brand-red text-4xl mb-6 char-icon"><i class="fas fa-gem"></i></div>
+                    <div class="uppercase tracking-widest text-xs font-bold text-gray-500 mb-2">The Dream Chaser</div>
+                    <h4 class="text-3xl font-bold text-white mb-1">Reema Sherin</h4>
+                    <p class="text-brand-red font-handwriting text-xl mb-6">"The Rachel"</p>
+                    <div class="space-y-4 text-gray-300 text-sm">
+                        <p><strong class="text-white">Role:</strong> Always evolving, ambitious, and keeping the team stylishly on track.</p>
+                        <div class="bg-black/30 p-4 rounded-xl mt-4 border border-white/5">
+                            <p class="font-serif italic text-brand-yellow">"Maybe the best version of me is still loading..."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rohini -->
+                <div class="character-card glass-panel rounded-3xl p-8 border border-white/10 relative overflow-hidden group reveal" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-yellow rounded-full blur-[80px] opacity-20 group-hover:opacity-50 transition-opacity"></div>
+                    <div class="text-brand-yellow text-4xl mb-6 char-icon"><i class="fas fa-guitar"></i></div>
+                    <div class="uppercase tracking-widest text-xs font-bold text-gray-500 mb-2">The Creative Soul</div>
+                    <h4 class="text-3xl font-bold text-white mb-1">Rohini</h4>
+                    <p class="text-brand-yellow font-handwriting text-xl mb-6">"The Phoebe"</p>
+                    <div class="space-y-4 text-gray-300 text-sm">
+                        <p><strong class="text-white">Role:</strong> The unpredictable creative thinker who brings positive energy.</p>
+                        <div class="bg-black/30 p-4 rounded-xl mt-4 border border-white/5">
+                            <p class="font-serif italic text-brand-yellow">"Normal is overrated anyway."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kavinaya -->
+                <div class="character-card glass-panel rounded-3xl p-8 border border-white/10 relative overflow-hidden group reveal" style="transition-delay: 200ms;">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-purple rounded-full blur-[80px] opacity-20 group-hover:opacity-50 transition-opacity"></div>
+                    <div class="text-brand-purple text-4xl mb-6 char-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div class="uppercase tracking-widest text-xs font-bold text-gray-500 mb-2">The Organizer</div>
+                    <h4 class="text-3xl font-bold text-white mb-1">Kavinaya</h4>
+                    <p class="text-brand-purple font-handwriting text-xl mb-6">"The Monica"</p>
+                    <div class="space-y-4 text-gray-300 text-sm">
+                        <p><strong class="text-white">Role:</strong> The responsible, reliable perfectionist. The backbone of the team.</p>
+                        <div class="bg-black/30 p-4 rounded-xl mt-4 border border-white/5">
+                            <p class="font-serif italic text-brand-yellow">"If nobody does it, I'll do it."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Campus Map Section (Replacing Timeline) -->
+    <section id="map-section" class="py-24 relative bg-[#1A1A1D] text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12 reveal">
+                <div>
+                    <h2 class="font-handwriting text-brand-red text-4xl mb-2">Interactive Guide</h2>
+                    <h3 class="text-4xl md:text-5xl font-sans font-black tracking-tight">Campus Map</h3>
+                </div>
+                <div class="bg-brand-purple text-white px-4 py-2 rounded-full font-bold shadow-[4px_4px_0px_#1A1A1D] border-2 border-[#1A1A1D] text-sm">
+                    <span id="map-progress">1 / 5</span> Explored
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+                
+                <!-- Map Left Side -->
+                <!-- Map Left Side -->
+<div class="relative w-full aspect-square md:aspect-auto md:h-[600px] dark-neo-border rounded-3xl map-bg-pattern overflow-hidden reveal">
+
+    <!-- Purple Glow -->
+    <div class="absolute inset-0 bg-brand-purple opacity-10 blur-[120px] pointer-events-none"></div>
+
+    <svg class="absolute inset-0 w-full h-full pointer-events-none">
+                    
+                   <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+    <path
+        id="map-line"
+        class="map-path animate-dash"
+        fill="none"
+        stroke-width="4"
+        stroke-dasharray="10,10"
+        d="M 20% 25% C 40% 15%, 65% 20%, 75% 35%
+           C 65% 55%, 55% 50%, 50% 60%
+           C 35% 70%, 25% 65%, 20% 75%
+           C 45% 90%, 65% 80%, 80% 70%" />
+</svg>
+
+                    <!-- Node 1: Classroom -->
+                    <div class="absolute top-[25%] left-[20%] transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="selectNode(1)">
+                        <div id="ring-1" class="absolute inset-0 bg-brand-red rounded-full animate-ping opacity-75"></div>
+                        <div id="node-1" class="relative w-16 h-16 bg-brand-red border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110">
+                            <i class="fas fa-chair text-white text-xl"></i>
+                        </div>
+                        <div class="mt-3 bg-[#1A1A1D] text-white text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap text-center shadow-md">Classroom (Start)</div>
+                    </div>
+
+                    <!-- Node 2: Canteen -->
+                    <div class="absolute top-[35%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="selectNode(2)">
+                        <div id="ring-2" class="absolute inset-0 bg-brand-purple rounded-full opacity-0"></div>
+                        <div id="node-2" class="relative w-16 h-16 bg-brand-purple border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110">
+                            <i class="fas fa-coffee text-white text-xl"></i>
+                        </div>
+                        <div class="mt-3 bg-[#1A1A1D] text-white text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap text-center shadow-md">Canteen</div>
+                    </div>
+
+                    <!-- Node 3: Library -->
+                    <div class="absolute top-[60%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="selectNode(3)">
+                        <div id="ring-3" class="absolute inset-0 bg-brand-purple rounded-full opacity-0"></div>
+                        <div id="node-3" class="relative w-16 h-16 bg-brand-purple border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110">
+                            <i class="fas fa-book-open text-white text-xl"></i>
+                        </div>
+                        <div class="mt-3 bg-[#1A1A1D] text-white text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap text-center shadow-md">Library</div>
+                    </div>
+
+                    <!-- Node 4: Computer Lab -->
+                    <div class="absolute top-[75%] left-[20%] transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="selectNode(4)">
+                        <div id="ring-4" class="absolute inset-0 bg-brand-purple rounded-full opacity-0"></div>
+                        <div id="node-4" class="relative w-16 h-16 bg-brand-purple border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110">
+                            <i class="fas fa-laptop text-white text-xl"></i>
+                        </div>
+                        <div class="mt-3 bg-[#1A1A1D] text-white text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap text-center shadow-md">Computer Lab</div>
+                    </div>
+
+                    <!-- Node 5: Restroom -->
+                    <div class="absolute top-[70%] left-[80%] transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="selectNode(5)">
+                        <div id="ring-5" class="absolute inset-0 bg-brand-purple rounded-full opacity-0"></div>
+                        <div id="node-5" class="relative w-16 h-16 bg-brand-purple border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110">
+                            <i class="fas fa-door-closed text-white text-xl"></i>
+                        </div>
+                        <div class="mt-3 bg-[#1A1A1D] text-white text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap text-center shadow-md">Restroom</div>
+                    </div>
+                </div>
+
+                <!-- Content Right Side -->
+                <div class="bg-white neo-border rounded-3xl p-8 md:p-12 flex flex-col justify-between reveal h-full min-h-[400px]">
+                    <div id="panel-content" class="panel-enter panel-enter-active">
+                        <span id="panel-badge" class="inline-block bg-brand-red text-white text-xs font-bold px-3 py-1 rounded-md mb-6 uppercase tracking-wider">
+                            PRIMARY COORDINATE
+                        </span>
+                        <h4 id="panel-title" class="text-3xl md:text-4xl font-sans font-black text-[#1A1A1D] mb-2 leading-tight">
+                            The Classroom (Last Bench)
+                        </h4>
+                        <p id="panel-subtitle" class="text-brand-red font-bold uppercase tracking-widest text-sm mb-6">
+                            WHERE IT ALL BEGAN
+                        </p>
+                        <p id="panel-desc" class="text-gray-600 text-lg leading-relaxed mb-8">
+                            "The back-row corner seat that launched it all. Tucked away perfectly in the shadow of the structural columns, this is where Kavinaya sat alone, where Rohini made herself instantly comfortable, and where Reema joined a week later. From sleeping during morning lectures to passing notes and plotting our days, this is the center of our universe."
+                        </p>
+                    </div>
+
+                    <div class="pt-6 border-t border-dashed border-gray-300 mt-auto">
+                        <p class="text-gray-400 italic text-sm">
+                            *Click different markers on the map grid to change coordinates.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Poster Gallery Section -->
+    <section class="py-24 bg-[#151518] relative border-y border-white/5 overflow-hidden">
+        <div class="absolute inset-0 bg-brand-purple opacity-5 blur-[100px] pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto px-4 text-center reveal relative z-10">
+            <h2 class="font-handwriting text-brand-yellow text-4xl mb-4 transform -rotate-2">Captured Memories</h2>
+            <h3 class="text-4xl md:text-5xl font-serif font-bold text-white mb-12">The Engineering Chronicles</h3>
+            
+            <div class="relative group inline-block">
+                <!-- Glowing border effect -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-brand-red via-brand-purple to-brand-yellow rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+                <img src="WhatsApp Image 2026-06-20 at 11.56.09 AM (1).jpeg" alt="The Engineering Chronicles - Lecture Hall Chaos" class="relative rounded-xl w-full max-w-3xl mx-auto border border-white/10 shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+            </div>
+        </div>
+    </section>
+
+    <!-- Soundtrack of Survival Section -->
+<section id="soundtrack-section" class="py-24 relative overflow-hidden border-y border-white/5 bg-[#1A1A1D] transition-colors duration-1000">
+    
+    <!-- Dynamic Ambient Background -->
+    <div id="player-ambient-bg" class="absolute inset-0 bg-gradient-to-br from-brand-coffee/20 to-brand-dark opacity-50 transition-all duration-1000 blur-3xl pointer-events-none"></div>
+    
+    <audio id="bg-music" preload="metadata">
+        <source src="song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="ambient-noise" loop preload="metadata"></audio>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Header -->
+        <div class="text-center mb-12 reveal">
+            <h2 class="font-sans font-black text-4xl md:text-5xl text-white mb-3 tracking-tight">
+                🎵 Soundtrack of Survival
+            </h2>
+            <p class="font-serif italic text-xl text-gray-400">
+                "The songs behind every assignment, every laugh, every memory."
+            </p>
+        </div>
+
+        <!-- Main Player UI -->
+        <div class="glass-panel rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col lg:flex-row backdrop-blur-2xl bg-black/40">
+            
+            <!-- Left: Album Art & Visualizer -->
+            <div class="w-full lg:w-2/5 p-8 relative flex flex-col items-center justify-center border-r border-white/5">
+                
+                <!-- Mood Selector -->
+                <div class="absolute top-6 left-6 z-20">
+                    <select id="mood-selector" class="bg-white/10 text-white text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/20 outline-none cursor-pointer hover:bg-white/20 transition">
+                        <option value="canteen">☕ Canteen Vibes</option>
+                        <option value="coding">🌙 2 AM Coding</option>
+                        <option value="panic">📚 Exam Panic</option>
+                    </select>
+                </div>
+
+                <!-- Story Button -->
+                <button onclick="openStoryModal()" class="absolute top-6 right-6 z-20 text-gray-400 hover:text-brand-yellow transition">
+                    <i class="fas fa-book-open text-xl"></i>
+                </button>
+
+                <!-- Record Player Art -->
+                <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center mt-8 group">
+                    <!-- Spinning Vinyl behind Cover -->
+                    <div id="premium-record" class="absolute top-0 right-[-40px] w-full h-full rounded-full bg-gray-900 border-[10px] border-black shadow-2xl flex items-center justify-center vinyl-record opacity-0 transition-all duration-700 group-hover:right-[-60px]">
+                        <div class="w-24 h-24 rounded-full bg-brand-yellow flex items-center justify-center border-4 border-black">
+                            <div class="w-4 h-4 bg-black rounded-full cursor-pointer" id="vinyl-easter-egg"></div>
+                        </div>
+                        <!-- Grooves -->
+                        <div class="absolute inset-0 rounded-full border border-white/5 m-3"></div>
+                        <div class="absolute inset-0 rounded-full border border-white/5 m-8"></div>
+                        <div class="absolute inset-0 rounded-full border border-white/5 m-14"></div>
+                    </div>
+                    
+                    <!-- Album Cover -->
+                    <div class="relative z-10 w-full h-full rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] border border-white/10 group-hover:-translate-x-4 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-purple/40 to-transparent mix-blend-overlay"></div>
+                        <img src="C:\Users\Dell\OneDrive\Documents\gemproj\albumcover.jpeg.jpeg" class="w-full h-full object-cover" alt="Album Cover">
+                    </div>
+                </div>
+
+                <!-- Visualizer -->
+                <div class="flex items-end justify-center gap-1 h-12 mt-12 w-full px-8" id="visualizer">
+                    <!-- Bars generated via JS -->
+                </div>
+            </div>
+
+            <!-- Right: Lyrics, Quotes & Controls -->
+            <div class="w-full lg:w-3/5 p-8 flex flex-col justify-between relative">
+                
+                <!-- Floating Quotes Container -->
+                <div id="quotes-container" class="absolute top-10 left-10 right-10 h-20 pointer-events-none z-30 flex justify-center items-center text-center"></div>
+
+                <!-- Lyrics Panel -->
+                <div class="flex-1 overflow-hidden relative mask-image-gradient pt-10" id="lyrics-container">
+                    <div id="lyrics-scroll" class="space-y-6 text-center transform transition-transform duration-500 font-serif text-xl md:text-3xl text-white font-bold h-48 overflow-y-auto no-scrollbar">
+                        <div class="lyric-line active">Press play to start the memories...</div>
+                    </div>
+                </div>
+
+                <!-- Player Controls Area -->
+                <div class="mt-8">
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h4 id="track-title" class="text-2xl font-bold text-white mb-1">The Last Bench Anthem</h4>
+                            <p class="text-brand-yellow text-sm tracking-widest uppercase">Phoebe ft. Compilation Errors</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <button class="text-gray-400 hover:text-brand-red transition"><i class="fas fa-heart text-xl"></i></button>
+                            <button id="headphone-btn" class="text-gray-400 hover:text-white transition" onclick="toggleAmbience()"><i class="fas fa-headphones text-xl"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="relative w-full h-2 bg-white/10 rounded-full cursor-pointer progress-container mb-6 flex items-center group" id="progress-container">
+                        <div id="progress-bar" class="absolute top-0 left-0 h-full bg-brand-yellow rounded-full w-0 group-hover:bg-brand-red transition-colors shadow-[0_0_10px_rgba(255,200,87,0.5)]"></div>
+                        <!-- Hover tooltip -->
+                        <div id="hover-tooltip" class="progress-hover-tooltip absolute -top-8 bg-black text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity pointer-events-none transform -translate-x-1/2">0:00</div>
+                    </div>
+                    
+                    <div class="flex justify-between text-xs text-gray-400 font-medium mb-6">
+                        <span id="current-time">0:00</span>
+                        <span id="total-duration">3:45</span>
+                    </div>
+
+                    <!-- Main Buttons -->
+                    <div class="flex justify-center items-center gap-6 md:gap-8">
+                        <button class="text-gray-400 hover:text-white transition"><i class="fas fa-random text-lg"></i></button>
+                        <button class="text-gray-400 hover:text-white transition hover:-translate-y-1" onclick="skip(-10)"><i class="fas fa-undo-alt text-lg"></i></button>
+                        <button class="text-gray-400 hover:text-white transition hover:-translate-y-1"><i class="fas fa-step-backward text-xl"></i></button>
+                        
+                        <button onclick="togglePremiumMusic()" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+                            <i id="premium-play-icon" class="fas fa-play ml-1 text-2xl"></i>
+                        </button>
+                        
+                        <button class="text-gray-400 hover:text-white transition hover:-translate-y-1"><i class="fas fa-step-forward text-xl"></i></button>
+                        <button class="text-gray-400 hover:text-white transition hover:-translate-y-1" onclick="skip(10)"><i class="fas fa-redo-alt text-lg"></i></button>
+                        <button class="text-gray-400 hover:text-white transition"><i class="fas fa-redo text-lg"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story Modal (Hidden by default) -->
+    <div id="story-modal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#151518] border border-brand-yellow/30 max-w-2xl w-full rounded-2xl p-8 relative shadow-[0_0_50px_rgba(255,200,87,0.1)]">
+            <button onclick="closeStoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl"><i class="fas fa-times"></i></button>
+            <h3 class="font-handwriting text-brand-yellow text-4xl mb-4">The Story Behind The Song</h3>
+            <h4 class="text-2xl font-serif text-white mb-6">The Last Bench Anthem</h4>
+            <p class="text-gray-300 leading-relaxed mb-4">This track embodies the chaos of our final semester. It was recorded (conceptually) during those long nights where code wouldn't compile and coffee was our only fuel.</p>
+            <p class="text-gray-300 leading-relaxed">It's a tribute to the canteen debates, the library whispers, and the bond that turned a random group assignment into a lifelong friendship.</p>
+        </div>
+    </div>
+</section>
+<section class="py-24 bg-[#151518] text-center">
+    <h2 class="font-handwriting text-brand-yellow text-5xl mb-8">
+        One Last Memory...
+    </h2>
+
+    <div class="glass-panel max-w-3xl mx-auto p-10 rounded-3xl">
+        <p id="memoryQuote"
+           class="text-2xl md:text-3xl text-white font-serif italic mb-8">
+            "The back bench was never just a seat."
+        </p>
+
+        <button onclick="changeQuote()"
+            class="px-8 py-4 bg-brand-purple text-white rounded-full font-bold hover:scale-105 transition">
+            Reveal Another Memory ✨
+        </button>
+    </div>
+</section>
+
+<section class="py-24 bg-[#151518] text-center reveal">
+
+    <h2 class="font-handwriting text-brand-yellow text-5xl mb-4">
+        Our Friendship In Numbers
+    </h2>
+
+    <p class="text-gray-400 mb-12">
+        Some memories can't be counted... but we tried anyway.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+
+        <div class="glass-panel p-8 rounded-3xl">
+            <h3 id="teaCount" class="text-5xl font-bold text-brand-yellow">0</h3>
+            <p class="text-gray-300 mt-3">☕ Tea Breaks</p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-3xl">
+            <h3 id="assignCount" class="text-5xl font-bold text-brand-purple">0</h3>
+            <p class="text-gray-300 mt-3">📚 Assignments</p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-3xl">
+            <h3 id="laughCount" class="text-5xl font-bold text-brand-red">0</h3>
+            <p class="text-gray-300 mt-3">😂 Laughs Shared</p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-3xl">
+            <h3 id="memoryCount" class="text-5xl font-bold text-white">0</h3>
+            <p class="text-gray-300 mt-3">❤️ Memories</p>
+        </div>
+
+    </div>
+
+</section>
+    <!-- Ending Section (Sunset) -->
+    <section class="min-h-[80vh] sunset-bg relative flex flex-col items-center justify-center px-4 overflow-hidden pt-20">
+        <div class="absolute bottom-0 w-full h-[500px] bg-brand-yellow opacity-10 blur-[150px] pointer-events-none"></div>
+        
+        <div class="relative z-10 text-center max-w-4xl mx-auto reveal">
+            <h2 class="text-3xl md:text-5xl font-serif text-white mb-12 leading-tight">
+                "One day these ordinary moments become extraordinary memories."
+            </h2>
+            
+            <div class="flex justify-center gap-4 mb-16">
+                <div class="w-16 h-16 rounded-full bg-brand-red/20 border border-brand-red flex items-center justify-center text-brand-red text-2xl animate-pulse"><i class="fas fa-gem"></i></div>
+                <div class="w-16 h-16 rounded-full bg-brand-yellow/20 border border-brand-yellow flex items-center justify-center text-brand-yellow text-2xl animate-pulse" style="animation-delay: 300ms;"><i class="fas fa-guitar"></i></div>
+                <div class="w-16 h-16 rounded-full bg-brand-purple/20 border border-brand-purple flex items-center justify-center text-brand-purple text-2xl animate-pulse" style="animation-delay: 600ms;"><i class="fas fa-clipboard-check"></i></div>
+            </div>
+
+            <p class="text-brand-yellow tracking-[0.2em] uppercase text-sm mb-8 font-bold">Different personalities. Different dreams.<br>One unforgettable journey.</p>
+            
+            <h1 class="font-handwriting text-6xl md:text-8xl text-white drop-shadow-lg mb-4 transform -rotate-2">To be continued...</h1>
+            <p class="text-gray-400 font-serif text-sm">Built with pure chaos & caffeine.</p>
+        </div>
+    </section>
+    
+
+    <script>
+        // Intro Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 1000);
+            }, 2500); 
+        });
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        revealElements.forEach(el => revealOnScroll.observe(el));
+
+        // Map Interaction Data & Logic
+        const mapData = {
+            1: {
+                title: "The Classroom (Last Bench)",
+                subtitle: "WHERE IT ALL BEGAN",
+                desc: "\"The back-row corner seat that launched it all. Tucked away perfectly in the shadow of the structural columns, this is where Kavinaya sat alone, where Rohini made herself instantly comfortable, and where Reema joined a week later. From sleeping during morning lectures to passing notes and plotting our days, this is the center of our universe.\"",
+                badge: "PRIMARY COORDINATE",
+                color: "bg-brand-red",
+                textColor: "text-brand-red"
+            },
+            2: {
+                title: "The Canteen",
+                subtitle: "THE ULTIMATE HANGOUT",
+                desc: "From sharing cold samosas to debating the meaning of life, this table saw more philosophical breakthroughs than the lecture halls. It's where we pooled our last rupees together to buy extra maggi and built friendships that outlasted the toughest semesters.",
+                badge: "FOOD & GOSSIP HUB",
+                color: "bg-brand-purple",
+                textColor: "text-brand-purple"
+            },
+            3: {
+                title: "The Library",
+                subtitle: "PRETEND STUDY ZONE",
+                desc: "Our designated 'hiding from professors' spot. We mastered the art of whispering loudly and looking extremely busy while actually plotting our weekend plans and browsing behind oversized engineering reference books.",
+                badge: "QUIET(ISH) ZONE",
+                color: "bg-brand-purple",
+                textColor: "text-brand-purple"
+            },
+            4: {
+                title: "Computer Lab",
+                subtitle: "THE PANIC STATION",
+                desc: "Where Ctrl+C and Ctrl+V saved our degrees. Between secretly playing web games and frantically debugging code five minutes before the submission link closed, this lab witnessed our greatest academic miracles.",
+                badge: "SURVIVAL POINT",
+                color: "bg-brand-purple",
+                textColor: "text-brand-purple"
+            },
+            5: {
+                title: "The Restroom",
+                subtitle: "THE DEBRIEF HQ",
+                desc: "The undisputed center for post-class debriefs, mandatory mirror selfies, and strategic escapes from the most boring lectures. If these walls could talk, they'd expose every secret we ever had.",
+                badge: "SAFE HAVEN",
+                color: "bg-brand-purple",
+                textColor: "text-brand-purple"
+            }
+        };
+
+        const exploredNodes = new Set([1]);
+        
+        function selectNode(id) {
+            exploredNodes.add(id);
+            document.getElementById('map-progress').innerText = `${exploredNodes.size} / 5`;
+
+            // Reset all nodes to default
+            for(let i=1; i<=5; i++) {
+                const node = document.getElementById(`node-${i}`);
+                const ring = document.getElementById(`ring-${i}`);
+                
+                // Keep the original node colors but remove ping effect
+                node.className = `relative w-16 h-16 border-4 border-[#1A1A1D] rounded-full flex items-center justify-center shadow-[4px_4px_0px_#1A1A1D] transition-transform duration-300 group-hover:scale-110 ${i===1 ? 'bg-brand-red' : 'bg-brand-purple'}`;
+                ring.className = `absolute inset-0 rounded-full opacity-0 ${i===1 ? 'bg-brand-red' : 'bg-brand-purple'}`;
+            }
+
+            // Set active state
+            const activeNode = document.getElementById(`node-${id}`);
+            const activeRing = document.getElementById(`ring-${id}`);
+            activeRing.classList.add('animate-ping', 'opacity-75');
+            activeNode.classList.remove('bg-brand-purple');
+            activeNode.classList.add('bg-brand-red'); // Active node turns red
+
+            // Animate Panel Transition
+            const panel = document.getElementById('panel-content');
+            panel.classList.remove('panel-enter-active');
+            
+            setTimeout(() => {
+                document.getElementById('panel-badge').innerText = mapData[id].badge;
+                document.getElementById('panel-title').innerText = mapData[id].title;
+                document.getElementById('panel-subtitle').innerText = mapData[id].subtitle;
+                document.getElementById('panel-desc').innerText = mapData[id].desc;
+                
+                // Color swapping for dynamic feel
+                document.getElementById('panel-badge').className = `inline-block text-white text-xs font-bold px-3 py-1 rounded-md mb-6 uppercase tracking-wider ${mapData[id].color}`;
+                document.getElementById('panel-subtitle').className = `font-bold uppercase tracking-widest text-sm mb-6 ${mapData[id].textColor}`;
+                
+                panel.classList.add('panel-enter-active');
+            }, 300);
+        }
+
+        // Premium Soundtrack Logic
+const audio = document.getElementById('bg-music');
+const ambientAudio = document.getElementById('ambient-noise');
+const playIcon = document.getElementById('premium-play-icon');
+const record = document.getElementById('premium-record');
+const progressBar = document.getElementById('progress-bar');
+const progressContainer = document.getElementById('progress-container');
+const currentTimeEl = document.getElementById('current-time');
+const durationEl = document.getElementById('total-duration');
+const hoverTooltip = document.getElementById('hover-tooltip');
+let isPremiumPlaying = false;
+
+// Mock Lyrics & Quotes Database
+const lyricsData = [
+    { time: 0, text: "🎶 (Instrumental Intro) 🎶" },
+    { time: 10, text: "Sitting in the back row, dodging the glare..." },
+    { time: 18, text: "Code breaking down, but we don't care." },
+    { time: 26, text: "Another deadline pending, coffee's gone cold," },
+    { time: 34, text: "These are the stories that will be told." }
+];
+
+const quotesData = [
+    { time: 15, text: "\"We survived another deadline.\"" },
+    { time: 30, text: "\"The canteen knew all our secrets.\"" },
+    { time: 45, text: "Kavinaya: \"Saved every deadline.\"" }
+];
+
+// Visualizer Setup
+const visualizer = document.getElementById('visualizer');
+for (let i = 0; i < 20; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'visualizer-bar';
+    bar.style.height = '4px';
+    visualizer.appendChild(bar);
+}
+
+function togglePremiumMusic() {
+    isPremiumPlaying = !isPremiumPlaying;
+    
+    if (isPremiumPlaying) {
+        audio.play();
+        playIcon.classList.replace('fa-play', 'fa-pause');
+        playIcon.classList.remove('ml-1');
+        record.style.opacity = '1';
+        record.style.right = '-60px';
+        record.classList.add('vinyl-spin');
+        animateVisualizer();
+    } else {
+        audio.pause();
+        playIcon.classList.replace('fa-pause', 'fa-play');
+        playIcon.classList.add('ml-1');
+        record.classList.remove('vinyl-spin');
+    }
+}
+
+function skip(seconds) {
+    audio.currentTime += seconds;
+}
+
+// Update Progress and sync Lyrics/Quotes
+audio.addEventListener('timeupdate', () => {
+    const progressPercent = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    currentTimeEl.innerText = formatTime(audio.currentTime);
+    
+    if(!isNaN(audio.duration)) {
+        durationEl.innerText = formatTime(audio.duration);
+    }
+
+    syncLyrics(audio.currentTime);
+    checkQuotes(audio.currentTime);
+});
+
+// Click to seek
+progressContainer.addEventListener('click', (e) => {
+    const width = progressContainer.clientWidth;
+    const clickX = e.offsetX;
+    const duration = audio.duration;
+    audio.currentTime = (clickX / width) * duration;
+});
+
+// Hover tooltip logic
+progressContainer.addEventListener('mousemove', (e) => {
+    const width = progressContainer.clientWidth;
+    const hoverX = e.offsetX;
+    const hoverTime = (hoverX / width) * (audio.duration || 225); // fallback to 3:45
+    hoverTooltip.style.left = `${hoverX}px`;
+    
+    // Custom chapter markers
+    let label = formatTime(hoverTime);
+    if(hoverTime > 60 && hoverTime < 120) label = `Canteen Memory - ${label}`;
+    else if(hoverTime > 120) label = `Final Project - ${label}`;
+    
+    hoverTooltip.innerText = label;
+});
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+// Sync Lyrics
+function syncLyrics(time) {
+    const container = document.getElementById('lyrics-scroll');
+    const currentLyric = lyricsData.reduce((prev, curr) => (curr.time <= time ? curr : prev), lyricsData[0]);
+    
+    if(container.dataset.lastTime !== currentLyric.time.toString()) {
+        container.innerHTML = `<div class="lyric-line active font-handwriting text-3xl md:text-4xl tracking-wider">${currentLyric.text}</div>`;
+        container.dataset.lastTime = currentLyric.time;
+    }
+}
+
+// Memory Quotes Logic
+let shownQuotes = new Set();
+function checkQuotes(time) {
+    quotesData.forEach(q => {
+        if (time >= q.time && time < q.time + 1 && !shownQuotes.has(q.time)) {
+            showQuote(q.text);
+            shownQuotes.add(q.time);
+        }
+    });
+}
+
+function showQuote(text) {
+    const container = document.getElementById('quotes-container');
+    const quoteEl = document.createElement('div');
+    quoteEl.className = 'memory-quote glass-panel px-6 py-3 rounded-full text-brand-yellow font-serif italic border border-brand-yellow/30 shadow-lg absolute';
+    quoteEl.innerText = text;
+    container.appendChild(quoteEl);
+    
+    setTimeout(() => { quoteEl.remove(); }, 4000);
+}
+
+// Visualizer Animation
+function animateVisualizer() {
+    if(!isPremiumPlaying) return;
+    const bars = document.querySelectorAll('.visualizer-bar');
+    bars.forEach(bar => {
+        const height = Math.random() * 40 + 4; // Generate random height
+        bar.style.height = `${height}px`;
+    });
+    setTimeout(() => requestAnimationFrame(animateVisualizer), 150);
+}
+
+// Mood Selector
+document.getElementById('mood-selector').addEventListener('change', (e) => {
+    const bg = document.getElementById('player-ambient-bg');
+    if(e.target.value === 'canteen') bg.className = 'absolute inset-0 bg-gradient-to-br from-brand-coffee/40 to-brand-dark opacity-50 transition-all duration-1000 blur-3xl';
+    if(e.target.value === 'coding') bg.className = 'absolute inset-0 bg-gradient-to-br from-brand-purple/20 to-black opacity-80 transition-all duration-1000 blur-3xl';
+    if(e.target.value === 'panic') bg.className = 'absolute inset-0 bg-gradient-to-br from-brand-red/20 to-brand-dark opacity-60 transition-all duration-1000 blur-3xl';
+});
+
+// Modal Logic
+function openStoryModal() {
+    const modal = document.getElementById('story-modal');
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.remove('opacity-0'), 10);
+}
+
+function closeStoryModal() {
+    const modal = document.getElementById('story-modal');
+    modal.classList.add('opacity-0');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+// Easter Eggs
+let clickCount = 0;
+document.getElementById('vinyl-easter-egg').addEventListener('click', () => {
+    clickCount++;
+    if(clickCount === 5) {
+        showQuote("We were on a break... from studying.");
+        clickCount = 0;
+    }
+});
+
+// End of track logic
+audio.addEventListener('ended', () => {
+    isPremiumPlaying = false;
+    playIcon.classList.replace('fa-pause', 'fa-play');
+    record.classList.remove('vinyl-spin');
+    
+    const container = document.getElementById('lyrics-scroll');
+    container.innerHTML = `
+        <div class="animate-pulse">
+            <div class="text-2xl text-brand-yellow font-serif mb-2">The assignments ended. The semester ended.</div>
+            <div class="text-4xl text-white font-handwriting">But the memories never will.</div>
+            <button onclick="audio.currentTime=0; togglePremiumMusic();" class="mt-6 text-sm tracking-widest uppercase text-brand-purple hover:text-white transition">▶ Replay Our Story</button>
+        </div>
+    `;
+});
+const memories = [
+    "The back bench was never just a seat.",
+    "Every attendance shortage had a story.",
+    "The canteen knew our secrets better than anyone.",
+    "Assignments were temporary, friendships weren't.",
+    "We entered as strangers and left as family.",
+    "Some lectures were forgotten, some memories never will be.",
+    "The library saw more gossip than studying.",
+    "Engineering taught us survival more than subjects.",
+    "Every screenshot became a memory.",
+    "The project deadlines created the strongest bonds.",
+    "The last bench felt more like home than our houses.",
+    "One day we will miss even the boring lectures.",
+    "Four years. Countless laughs. One unforgettable journey."
+];
+
+function changeQuote() {
+    const random =
+        memories[Math.floor(Math.random() * memories.length)];
+
+    document.getElementById("memoryQuote").innerText = random;
+}
+function animateCounter(id, target) {
+
+    let count = 0;
+
+    const increment = target / 100;
+
+    const counter = setInterval(() => {
+
+        count += increment;
+
+        if (count >= target) {
+
+            document.getElementById(id).innerText = target + "+";
+
+            clearInterval(counter);
+
+        } else {
+
+            document.getElementById(id).innerText =
+                Math.floor(count);
+
+        }
+
+    }, 20);
+
+}
+
+window.addEventListener("load", () => {
+
+    animateCounter("teaCount", 999);
+
+    animateCounter("assignCount", 120);
+
+    animateCounter("laughCount", 5000);
+
+    animateCounter("memoryCount", 100);
+
+});
+    </script>
+</body>
+</html>
